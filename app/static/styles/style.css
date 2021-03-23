@@ -5,3 +5,9 @@
     text-align: center;
     text-decoration-color: white;
 }
+
+.card-img-top {
+    width: 100%;
+    height: 15vw;
+    object-fit: cover;
+}

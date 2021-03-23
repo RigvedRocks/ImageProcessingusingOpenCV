@@ -1,26 +1,53 @@
-from flask import Flask,render_template,url_for,request
+from flask import render_template,url_for,request
 import os
 from app import app
 import cv2
 import numpy as np
 
+app.config['MAX_CONTENT_LENGTH'] = 2048 * 2048
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_PATH'] = 'static/upload'
+
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0) 
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
+
 @app.route('/')
-@app.route('/options',methods=['GET','POST'])
+@app.route('/options')
 def options():
     return render_template('options.html')
 
-UPLOAD_FOLDER = './upload'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 @app.route('/scaling',methods=['GET','POST'])
 def scaling():
-    
-    #f=request.files['file']
-    #f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
-    #full_filename = os.path.join(app.config['UPLOAD_FOLDER'],f.filename)
-    #img = cv2.imread(full_filename)
-    #res = cv2.resize(img,(2*width, 2*height))
+    #if request.method == 'POST':
     return render_template('scaling.html')
+
+#@app.route('/success',methods=['GET','POST'])
+@app.route('/scalingsuccess',methods=['GET','POST'])
+def scalingsuccess():
+    #if request.method == 'POST':
+        uploaded_file = request.files['file']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+           file_ext = os.path.splitext(filename)[1]
+           if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                file_ext != validate_image(uploaded_file.stream):
+                return render_template('400.html')
+           uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+           x = request.form.get('xdirection')
+           y = request.form.get('ydirection')
+           width,height = image.shape
+           img = cv2.imread(uploaded_file)
+           res = cv2.resize(img,(x*width, y*height))
+           return render_template('scalingsuccess.html',image=img,result=res)  
+        else :
+           return render_template('valid.html')   
 
 @app.route('/rotation',methods=['GET','POST'])
 def rotation():
@@ -240,7 +267,11 @@ def masking():
     f=request.files['file']
     f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'],f.filename)
-    img = cv2.imread(full_filename)                                  
+    img = cv2.imread(full_filename)     
+
+
+
 
 if __name__== "__main__":
     app.run(debug=True)
+

@@ -20,27 +20,55 @@
     </nav>
     <br>
     <br>
-    <div class="container">
-        <div class="row">
-          <div class="col-12">
-              <p> Please enter the image </p> 
-          </div>
-        </div>  
-        <form method = "POST" action="/scaling" enctype="multipart/form-data" >
-              <div class="form-group">
-                  <input type="file" class="form-control-file" id="exampleFormControlFile1">
-              </div>
-        </form> 
+    <div>
+        <div class="row text-center justify-content-center">
+
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+      
+              <form class="md-form" method="POST" action="/scalinguploader" enctype="multipart/form-data">
+                <div class="file-field">
+                  <div class="z-depth-1-half mb-4">
+                    <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
+                      alt="example placeholder">
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <div class="btn btn-mdb-color btn-rounded float-left">
+                      <span>Choose file</span>
+                      <input type="file" name="file">
+                    </div>
+                  </div>
+                </div>
+              </form>
+      
+            </div>    
     </div>
-    <form method='POST' action='http://localhost:5000/'>
+    <form method='POST' action='/scalingsuccess' enctype="multipart/form-data">
+
         <div class="form-group">
-            <label for="label2">Enter the amount of scaling in the x direction</label>
-            <input type = "number" class = 'form-control'> 
+            <div class = "row">
+                <div class = "col-sm-7">
+                    <label for="label2">Enter the amount of scaling in the x direction</label>
+                </div>
+                <div class = "col-sm-4">
+                    <input type = "number" class = 'form-control' name = "xdirection"> 
+                </div>
+            </div>
         </div>
         <div class="form-group">
-            <label for="label2">Enter the amount of scaling in the y direction</label>
-            <input type = "number" class = 'form-control'> 
+            <div class = "row">
+                <div class = "col-sm-7">
+                    <label for="label2">Enter the amount of scaling in the y direction</label>
+                </div>
+                <div class = "col-sm-4">
+                    <input type = "number" class = 'form-control' name = "ydirection"> 
+                </div>
+            </div>
+            <div class = "row justify-content-center">
+              <input type="submit" value="Proceed"> 
+            </div>
         </div>
     </form>
+
 </body>
 </html>
